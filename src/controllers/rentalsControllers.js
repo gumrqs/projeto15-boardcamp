@@ -231,7 +231,6 @@ export async function finishRental (req, res){
 		`, [rental.rows[0].customerId, rental.rows[0].gameId, rental.rows[0].rentDate, rental.rows[0].daysRented, rental.rows[0].returnDate, rental.rows[0].originalPrice, rental.rows[0].delayFee, rental.rows[0].id])
 		return res.sendStatus(200)
 	}catch(error){
-		console.log(error)
 		res.sendStatus(500)
 	}
 }
