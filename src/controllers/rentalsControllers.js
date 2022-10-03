@@ -201,14 +201,14 @@ export async function rental (req,res){
     }
 }
 
-/* export async function finishRental (req, res){
+export async function finishRental (req, res){
 	try{
         const {id} = req.params
 		const rental = await connection.query('SELECT * FROM rentals WHERE id=$1', [id])
             if(rental.rows.length == 0){
                 return res.sendStatus(404);
             }
-            if(rental.rows[0].returnDate != null){
+            if(rental.rows[0].returnDate == null){
                 return res.sendStatus(400)
             }
 		    rental.rows[0].returnDate = dayjs().format('YYYY-MM-DD')
@@ -234,4 +234,4 @@ export async function rental (req,res){
 		console.log(error)
 		res.sendStatus(500)
 	}
-} */
+}
