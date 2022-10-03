@@ -15,7 +15,6 @@ export async function games (req, res){
             WHERE
                 id=$1;
         `,[categoryId]);
-        console.log(validationCategoryId.rows, '********')
 
         if(validationCategoryId.rows.length === 0){
             return res.status(400).send('Id não existente')
@@ -55,14 +54,30 @@ export async function allGames (req,res){
 
         let game;
         const searchName = req.query.name;
-
+            
         if(searchName){
-
+            game = await connection.query(` 
+            SELECT 
+                games.*, categories.name as "categoryName"
+            FROM 
+                games
+            JOIN 
+                categories 
+            ON 
+                categories.id = games."categoryId"
+              
+            WHERE 
+                lower(games.name) 
+            LIKE 
+                lower($1);`,[`${searchName}%`])
+                
+            return res.status(200).send(game.rows)
         }
         else{
+            console.log('entrei no else')
             game = await connection.query(`
             SELECT 
-                 games.id, games.name, games.image, games."stockTotal", games."pricePerDay", games."categoryId", categories.name as "categoryName"
+                games.*, categories.name as "categoryName"
             FROM 
                 games
             JOIN 
@@ -71,11 +86,10 @@ export async function allGames (req,res){
                 categories.id = games."categoryId"
             ;
         `)
+        return res.status(200).send(game.rows)
         }
 
 
-        
-        return res.status(200).send(game.rows)
 
 
     } catch (error) {
